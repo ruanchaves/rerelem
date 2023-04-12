@@ -233,6 +233,27 @@ def main():
     val_df.to_csv("rerelem_val.csv", index=False)
     test_df.to_csv("rerelem_test.csv", index=False)
 
+    def find_labels_not_in_train(train, test_df, val_df):
+        # Step 1: Concatenate the test and validation dataframes
+        df = pd.concat([test_df, val_df], ignore_index=True)
+        # Step 2: Get a list of all unique labels in the df dataframe
+        df_labels = df['label'].unique()
+        # Step 3: Get a list of all unique labels in the train dataframe
+        train_labels = train['label'].unique()
+        # Step 4: Convert both lists into sets
+        df_labels_set = set(df_labels)
+        train_labels_set = set(train_labels)
+        # Step 5: Find the labels that are in df_labels_set but not in train_labels_set
+        labels_not_in_train = df_labels_set - train_labels_set
+        # Print the result
+        return list(labels_not_in_train)
+
+    labels_not_in_train = find_labels_not_in_train(train_df, test_df, val_df)
+    logger.info(f"labels not in train: {labels_not_in_train}")
+
+    val_df = val_df[~val_df['label'].isin(labels_not_in_train)]
+    test_df = test_df[~test_df['label'].isin(labels_not_in_train)]
+
     logger.info(f"train: {len(train_df)}")
     logger.info(f"val: {len(val_df)}")
     logger.info(f"test: {len(test_df)}")
