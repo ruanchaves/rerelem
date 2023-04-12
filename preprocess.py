@@ -229,10 +229,6 @@ def main():
     val_df = df.iloc[val_idx]
     test_df = df.iloc[test_idx]
 
-    train_df.to_csv("rerelem_train.csv", index=False)
-    val_df.to_csv("rerelem_val.csv", index=False)
-    test_df.to_csv("rerelem_test.csv", index=False)
-
     def find_labels_not_in_train(train, test_df, val_df):
         # Step 1: Concatenate the test and validation dataframes
         df = pd.concat([test_df, val_df], ignore_index=True)
@@ -257,6 +253,10 @@ def main():
     logger.info(f"train: {len(train_df)}")
     logger.info(f"val: {len(val_df)}")
     logger.info(f"test: {len(test_df)}")
+
+    train_df.to_csv("rerelem_train.csv", index=False)
+    val_df.to_csv("rerelem_val.csv", index=False)
+    test_df.to_csv("rerelem_test.csv", index=False)
 
 
 
